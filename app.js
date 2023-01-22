@@ -4,12 +4,14 @@ const mongoose = require("mongoose");
 const db = mongoose.connection;
 const campgroundDB = require("./models/campgroundDB");
 const methodOverride = require("method-override");
-
+const ejsMate = require("ejs-mate");
 const app = express();
 // this parses the body of the request and adds it to the req.body object
 app.use(express.urlencoded({ extended: true }));
+//underscore method override allows us to use the put and delete methods in our forms
 app.use(methodOverride("_method"));
-// connect to the database and log a message to the console if the connection is successful
+app.engine("ejs", ejsMate);
+
 mongoose.set("strictQuery", true);
 mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp");
 db.on("error", console.error.bind(console, "connection error:"));
@@ -30,19 +32,19 @@ app.get("/campgrounds", async (req, res) => {
   res.render("campgrounds/index", { allCampgrounds });
 });
 
-// order matters here, if we put this route above the /campgrounds route, it will always render the newCampground page 
+// order matters here, if we put this route above the /campgrounds route, it will always render the newCampground page
 // because it will always match the /campgrounds route
-app.get('/campgrounds/newCampground', (req, res) => {
-    res.render('campgrounds/newCampground');
+app.get("/campgrounds/newCampground", (req, res) => {
+  res.render("campgrounds/newCampground");
 });
 
 // CRUD OPERATIONS FOR CAMPGROUNDS
 
 // create campground route
 app.post("/campgrounds", async (req, res) => {
-    const campground = new campgroundDB(req.body.campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
+  const campground = new campgroundDB(req.body.campground);
+  await campground.save();
+  res.redirect(`/campgrounds/${campground._id}`);
 });
 // show campground route
 app.get("/campgrounds/:id", async (req, res) => {
@@ -52,8 +54,24 @@ app.get("/campgrounds/:id", async (req, res) => {
 
 // edit campground route
 app.get("/campgrounds/:id/edit", async (req, res) => {
-    const campground = await campgroundDB.findById(req.params.id);
-    res.render("campgrounds/edit", { campground });
+  const campground = await campgroundDB.findById(req.params.id);
+  res.render("campgrounds/edit", { campground });
+});
+
+//update campground route
+app.put("/campgrounds/:id", async (req, res) => {
+  const { id } = req.params;
+  //use the spread operator to spread out the properties of the req.body.campground object
+  const campground = await campgroundDB.findByIdAndUpdate(id, {
+    ...req.body.campground,
+  });
+  res.redirect(`/campgrounds/${campground._id}`);
+});
+// delete campground route
+app.delete("/campgrounds/:id", async (req, res) => {
+  const { id } = req.params;
+  await campgroundDB.findByIdAndDelete(id);
+  res.redirect("/campgrounds");
 });
 
 app.listen(3030, () => {
