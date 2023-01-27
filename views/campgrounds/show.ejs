@@ -1,25 +1,31 @@
-...<% layout('layouts/boilerplate')%>
-<div class="row">
-    <div class="col-6 offset-3">
-        <div class="card mb-3">
-            <img src="<%= campground.image%>" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title"><%= campground.title%></h5>
-                <p class="card-text"><%= campground.description%></p>
+<% layout('layouts/boilerplate')%>
+    <div class="container py-4 my-4 mx-auto d-flex flex-column">
+        <div class="header">
+            <div class="row r1">
+                <div class="col-md-9 abc">
+                    <h1><%= campground.title %></h1>
+                </div>
+                <div class="col-md-3 text-right pqr"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                    <div class="col-md-5 text-right"><div class="text-muted">
+                        2 days ago
+                    </div></div>
+                </div>
+                <p class="text-right para"><%= campground.location%></p>
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted"><%= campground.location%></li>
-                <li class="list-group-item">$<%= campground.price%>/night</li>
-            </ul>
-            <div class="card-body">
-                <a class="card-link btn btn-info" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
-                <form class="d-inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-danger">Delete</button>
-                </form>
+            <div class="row r1">
+                <div class="col-md-7"> <img style="margin-top: 20px" class="rounded" src="<%= campground.image%>" width="90%" height="auto"></div>
+                <div class="col-md-5">
+                    <h3>Description</h3>
+                    <p style="letter-spacing: 1px;"> <%= campground.description%> </p>
+                    <div class="card-body">
+                        <a class="card-link btn" style="background-color: #9f9f9f9b;" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
+                        <form class="d-inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="card-footer text-muted">
-                2 days ago
-            </div>
-        </div>
-    </div>
-</div>
+                        </div>
+                            <div>
+                        </div>
+                    </div>
