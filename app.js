@@ -6,15 +6,18 @@ const campgroundDB = require("./models/campgroundDB");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const catchAsync = require("./utilities/catchAsync");
+const expressError = require("./utilities/expressError");
 const app = express();
-// this parses the body of the request and adds it to the req.body object
+
+// parse the body of the request and add it to the req.body object
 app.use(express.urlencoded({ extended: true }));
-//underscore method override allows us to use the put and delete methods in our forms
+
+// enable the use of put and delete methods in forms
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 
 mongoose.set("strictQuery", true);
-mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp");
+mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp", { useNewUrlParser: true, useUnifiedTopology: true });
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
   console.log("Database connected");
@@ -27,15 +30,13 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-app.get("/campgrounds", catchAsync(async (req, res) => {
-  // Campground.find({}) will return all the campgrounds in the database
+app.get("/campgrounds", catchAsync(async (req, res, next) => {
   const allCampgrounds = await campgroundDB.find({});
   res.render("campgrounds/index", { allCampgrounds });
 }));
 
-// order matters here, if we put this route above the /campgrounds route, it will always render the newCampground page
-// because it will always match the /campgrounds route
 app.get("/campgrounds/newCampground", (req, res) => {
+  
   res.render("campgrounds/newCampground");
 });
 
@@ -43,23 +44,29 @@ app.get("/campgrounds/newCampground", (req, res) => {
 
 // create campground route
 app.post("/campgrounds", catchAsync(async (req, res, next) => {
-    const campground = new campgroundDB(req.body.campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`);
-  }));
+  if (!req.body.campground) return next(new expressError("Invalid Campground Data", 400));
+  const campground = new campgroundDB(req.body.campground);
+  await campground.save();
+  res.redirect(`/campgrounds/${campground._id}`);
+}));
+
 // show campground route
-app.get("/campgrounds/:id", catchAsync( async (req, res) => {
+app.get("/campgrounds/:id", catchAsync( async (req, res, next) => {
+  const isValidId = mongoose.Types.ObjectId.isValid(req.params.id);
+  if (!isValidId) return next(new expressError("Invalid Campground Id", 400));
   const campground = await campgroundDB.findById(req.params.id);
+  if (!campground) return next(new expressError("Campground Not Found", 404));
   res.render("campgrounds/show", { campground });
 }));
 
 // edit campground route
-app.get("/campgrounds/:id/edit",catchAsync(async (req, res) => {
+app.get("/campgrounds/:id/edit", catchAsync(async (req, res, next) => {
   const campground = await campgroundDB.findById(req.params.id);
+  if (!campground) return next(new expressError("Campground not found", 404));
   res.render("campgrounds/edit", { campground });
 }));
 
-//update campground route
+// update campground route
 app.put("/campgrounds/:id", catchAsync(async (req, res) => {
   const { id } = req.params;
   //use the spread operator to spread out the properties of the req.body.campground object
@@ -75,14 +82,16 @@ app.delete("/campgrounds/:id", catchAsync(async (req, res) => {
   res.redirect("/campgrounds");
 }));
 
-app.all("*", (err, req, res, next) => {
-  next(new ExpressError("Page Not Found", 404));
-});
+app.all('*', (req, res, next) => {
+  next(new ExpressError('Page Not Found', 404))
+})
 
-// basic error handling
-app.use("*", (err, req, res, next) => {
-  res.sendFile(__dirname + "/views/error.html");
-});
+// basic error handling middleware
+app.use((err, req, res, next) => {
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = 'Oh No, Something Went Wrong!'
+  res.status(statusCode).render('error', { err })
+})
 
 
 app.listen(3030, () => {
