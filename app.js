@@ -9,6 +9,7 @@ const catchAsync = require("./utilities/catchAsync");
 const expressError = require("./utilities/expressError");
 const app = express();
 const {campgroundSchema} = require("./schemas.js");
+const review = require("./models/review");
 // parse the body of the request and add it to the req.body object
 app.use(express.urlencoded({ extended: true }));
 
@@ -101,6 +102,11 @@ app.use((err, req, res, next) => {
   if (!err.message) err.message = 'Oh No, Something Went Wrong!'
   res.status(statusCode).render('error', { err })
 })
+
+// adding reviews to campgrounds.
+app.post('/campgrounds/:id/reviews',catchAsync(async (req, res) => {
+  res.send('sdafsd')
+}))
 
 
 app.listen(3030, () => {
