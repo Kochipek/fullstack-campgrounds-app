@@ -23,12 +23,14 @@
     class="d-flex flex-column vh-100"
     style="color: rgb(43, 43, 43); background-color: #fafafa;"
   >
-  <div id="loader">
-    <div class="spinner"></div>
-  </div>
+
     <%- include('../partials/navbar') %>
     <main class="container">
-      <div class="ml-20 mt-5"><%- body %></div>
+
+      <div class="ml-20 mt-5">
+        <%- include('../partials/flash') %>
+        <%- body %>
+       </div>
     </main>
     <%- include('../partials/footer') %>
     <script

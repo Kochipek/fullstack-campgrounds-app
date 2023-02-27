@@ -8,6 +8,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const expressError = require("./utilities/expressError");
 const session = require("express-session");
+const flash = require("connect-flash");
 const app = express();
 mongoose.set("strictQuery", true);
 app.use(express.urlencoded({ extended: true }));
@@ -44,7 +45,15 @@ const sessionConfig = {
 }
 
 app.use(session(sessionConfig));
+app.use(flash());
 
+// middleware to add flash messages to all routes
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  // next is required to move on to the next middleware
+  next();
+});
 
 // use the campground routes for all routes starting with /campgrounds
 app.use("/campgrounds", campgroundRoutes);
