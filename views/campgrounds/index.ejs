@@ -12,7 +12,7 @@
 <ul>
   <a href="/campgrounds/newCampground" style="text-decoration: none; color: brown;"><p>Add New Campground</p></a>
   <div class="row">
-    <% for(let campground of allCampgrounds) { %>
+    <% for(let campground of campgrounds) { %>
       <div class="col-md-4">
               <div class="content">
         <a href="/campgrounds/<%= campground._id %>">

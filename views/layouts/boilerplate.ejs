@@ -17,11 +17,11 @@
       integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S"
       crossorigin="anonymous"
     />
+
   </head>
-  
   <body
     class="d-flex flex-column vh-100"
-    style="color: rgb(43, 43, 43); background-color: #fafafa; letter-spacing: 3px;"
+    style="color: rgb(43, 43, 43); background-color: #fafafa;"
   >
   <div id="loader">
     <div class="spinner"></div>
@@ -41,31 +41,7 @@
       integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
       crossorigin="anonymous"
     ></script>
-
-    <script>
-      (function () {
-        "use strict";
-
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        const forms = document.querySelectorAll(".validated-form");
-
-        // Loop over them and prevent submission
-        Array.from(forms).forEach(function (form) {
-          form.addEventListener(
-            "submit",
-            function (event) {
-              if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-
-              form.classList.add("was-validated");
-            },
-            false
-          );
-        });
-      })();
-    </script>
+    <script src="/scripts/formValidation.js"></script>
     <style>
       .title {
         color: #1a1a1a;

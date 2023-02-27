@@ -39,7 +39,6 @@
           type="text"
           id="image"
           name="campground[image"
-          required
           value="<%=campground.image %>"
         />
         <div class="valid-feedback">Looks good!</div>
@@ -77,7 +76,9 @@
         <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
-        <button class="btn" style="background-color: #28462d; color: #fdfdfd;">Update Campground</button>
+        <button class="btn" style="background-color: #28462d; color: #fdfdfd">
+          Update Campground
+        </button>
       </div>
     </form>
     <a href="/campgrounds/<%= campground._id%>">Back To Campground</a>
