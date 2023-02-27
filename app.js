@@ -9,6 +9,9 @@ const ejsMate = require("ejs-mate");
 const expressError = require("./utilities/expressError");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
 const app = express();
 mongoose.set("strictQuery", true);
 app.use(express.urlencoded({ extended: true }));
@@ -46,6 +49,12 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // middleware to add flash messages to all routes
 app.use((req, res, next) => {
@@ -53,6 +62,12 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   // next is required to move on to the next middleware
   next();
+});
+
+app.get("/firstUser", async (req, res) => {
+  const user = new User({ email: " ipekk@gmail.com", username: "ipek" });
+  const newUser = await User.register(user, "ipek");
+  res.send(newUser);
 });
 
 // use the campground routes for all routes starting with /campgrounds
