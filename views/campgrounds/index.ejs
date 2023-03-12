@@ -1,16 +1,7 @@
 <% layout('layouts/boilerplate') %>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-<h1 class="d-flex justify-content-center" mt-5 pt-5 >All campgrounds</h1>
+
+<h1 class="d-flex justify-content-center m-3 p-3"  >All campgrounds</h1>
 <ul>
-  <a href="/campgrounds/newCampground" style="text-decoration: none; color: brown;"><p>Add New Campground</p></a>
   <div class="row">
     <% for(let campground of campgrounds) { %>
       <div class="col-md-4">
@@ -22,6 +13,7 @@
             <h3 class="content-title"><%= campground.title%></h3>
             <p class="content-text">
               <i class="fa fa-map-marker"></i><%= campground.location%>
+
             </p>
           </div>
         </a>
