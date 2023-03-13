@@ -1,6 +1,6 @@
 # Campgrounds fullstack web app
+![](https://github.com/Kochipek/fullstack-campgrounds-app/blob/master/preview.gif)
 <h3> To-do's  </h3> 
-
 
 - [X] Add Name, Image and Description to the campground.
 - [X] Create, Update, Delete the Campground.
