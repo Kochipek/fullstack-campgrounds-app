@@ -10,6 +10,8 @@
 - [X] Authentication (Users can sign up or login using username and password && User can not submit campgrounds if they are not logged in.)
 - [X] Authorization
       (User can only modify campgrounds created by them)
+- [X] Star Rating System
+- [ ] Image Upload (Cloudinary)
 - [ ] Cluster Map
 - [ ] Every registered user has profile where all his submitted campgrounds are shown
 - [ ] Search campground by name or location
