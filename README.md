@@ -28,8 +28,8 @@ Backend= NodeJS, ExpressJS, MongoDB
 
 <h4> Libraries: </h4> 
 
-Password -for authentication
+Password -  Authentication
 
-JOI -for Validation
+JOI -  Validation
 
 Nodemon - monitor scripting
