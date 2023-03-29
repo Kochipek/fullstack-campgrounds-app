@@ -32,4 +32,3 @@ Password -  Authentication
 
 JOI -  Validation
 
-Nodemon - monitor scripting
